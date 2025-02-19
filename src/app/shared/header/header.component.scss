@@ -1,0 +1,45 @@
+@use '../../../colors'; // Ensure this path resolves correctly
+
+.header {
+  margin: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // optional subtle shadow
+
+  .logo {
+    font-size: 1.75rem; // increased size for prominence
+    font-weight: bold;
+    padding: 8px 0;
+  }
+
+  .spacer {
+    flex-grow: 1;
+  }
+
+  nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+
+    a {
+      font-size: 1.1rem;
+      text-decoration: none; // remove default underline
+      color: map-get(colors.$theme-colors, text);
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: map-get(colors.$theme-colors, accent);
+      }
+
+      &.active-link {
+        font-weight: bold;
+        background-color: rgba(255, 255, 255, 0.3);
+        /* Remove border-bottom if you had one */
+      }
+    }
+  }
+}

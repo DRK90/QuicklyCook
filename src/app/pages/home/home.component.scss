@@ -1,0 +1,80 @@
+/* Container styling */
+.container.home {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Headings and Paragraphs */
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 24px;
+}
+
+/* Search Area Layout */
+.search-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+/* Enlarge and center the text field */
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Recipe Result Card */
+.recipe-result {
+  margin-top: 40px;
+  
+  mat-card {
+    text-align: left;
+    padding: 16px;
+    
+    mat-card-header {
+      border-bottom: 1px solid #ccc;
+    }
+    
+    mat-card-content {
+      margin-top: 16px;
+      
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 16px 0;
+        
+        div {
+          flex: 1 1 30%;
+        }
+      }
+      
+      h3 {
+        margin-top: 24px;
+        margin-bottom: 8px;
+      }
+      
+      ul, ol {
+        margin-left: 20px;
+      }
+    }
+    
+    mat-card-footer {
+      text-align: right;
+      font-size: 0.9rem;
+      color: #666;
+      border-top: 1px solid #ccc;
+      margin-top: 16px;
+      padding-top: 8px;
+    }
+  }
+}

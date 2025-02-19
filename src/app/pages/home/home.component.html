@@ -1,0 +1,127 @@
+<div class="container home">
+  <h1>Quickly get some cooking inspiration!</h1>
+  <p>
+    Describe what kind of food you want, and we’ll generate a recipe for you!
+  </p>
+  
+  <div class="search-area">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Recipe Idea</mat-label>
+      <input
+        matInput
+        placeholder="E.g., Spicy Chicken Curry"
+        [(ngModel)]="recipeQuery" />
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="onSearch()">
+      Search
+    </button>
+  </div>
+  
+  <div class="recipe-result" *ngIf="recipe">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ recipe.recipeName }}</mat-card-title>
+        <mat-card-subtitle>{{ recipe.recipeType }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ recipe.recipeDescription }}</p>
+        
+        <div class="stats">
+          <div><strong>Prep Time:</strong> {{ recipe.recipePrepTime }} min</div>
+          <div><strong>Cook Time:</strong> {{ recipe.recipeCookTime }} min</div>
+          <div><strong>User Rating:</strong> {{ recipe.userRecipeRating }}/5</div>
+          <div><strong>Avg Rating:</strong> {{ recipe.averageRecipeRating }}/5</div>
+        </div>
+        
+        <div class="ingredients" *ngIf="recipe.ingredients?.length">
+          <h3>Ingredients</h3>
+          <ul>
+            <li *ngFor="let ingredient of recipe.ingredients">
+              {{ ingredient.ingredientQuantity }} – {{ ingredient.ingredientName }}
+            </li>
+          </ul>
+        </div>
+        
+        <div class="steps" *ngIf="recipe.recipeSteps?.length">
+          <h3>Recipe Steps</h3>
+          <ol>
+            <li *ngFor="let step of recipe.recipeSteps">
+              {{ step.stepDescription }}
+            </li>
+          </ol>
+        </div>
+        
+        <div class="notes" *ngIf="recipe.recipeNotes?.length">
+          <h3>Notes</h3>
+          <ul>
+            <li *ngFor="let note of recipe.recipeNotes">
+              {{ note }}
+            </li>
+          </ul>
+        </div>
+      </mat-card-content>
+      <mat-card-footer>
+        Created on: {{ recipe.recipeCreatedDate | date:'mediumDate' }}
+      </mat-card-footer>
+    </mat-card>
+  </div>
+
+  <!--RECENT RECIPE SECTION-->
+  <div class="recent-recipes">
+    <button mat-raised-button color="primary" (click)="onShowMoreRecentRecipes()">
+      Show More Recent Recipes
+    </button>
+  </div>
+  
+  <div class="recipe-list" *ngIf="recentRecipes && recentRecipes.length">
+    <h2>Recent Recipes</h2>
+    <div *ngFor="let rec of recentRecipes" class="recipe-result">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ rec.recipeName }}</mat-card-title>
+          <mat-card-subtitle>{{ rec.recipeType }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ rec.recipeDescription }}</p>
+          
+          <div class="stats">
+            <div><strong>Prep Time:</strong> {{ rec.recipePrepTime }} min</div>
+            <div><strong>Cook Time:</strong> {{ rec.recipeCookTime }} min</div>
+            <div><strong>User Rating:</strong> {{ rec.userRecipeRating }}/5</div>
+            <div><strong>Avg Rating:</strong> {{ rec.averageRecipeRating }}/5</div>
+          </div>
+          
+          <div class="ingredients" *ngIf="rec.ingredients?.length">
+            <h3>Ingredients</h3>
+            <ul>
+              <li *ngFor="let ingredient of rec.ingredients">
+                {{ ingredient.ingredientQuantity }} – {{ ingredient.ingredientName }}
+              </li>
+            </ul>
+          </div>
+          
+          <div class="steps" *ngIf="rec.recipeSteps?.length">
+            <h3>Recipe Steps</h3>
+            <ol>
+              <li *ngFor="let step of rec.recipeSteps">
+                {{ step.stepDescription }}
+              </li>
+            </ol>
+          </div>
+          
+          <div class="notes" *ngIf="rec.recipeNotes?.length">
+            <h3>Notes</h3>
+            <ul>
+              <li *ngFor="let note of rec.recipeNotes">
+                {{ note }}
+              </li>
+            </ul>
+          </div>
+        </mat-card-content>
+        <mat-card-footer>
+          Created on: {{ rec.recipeCreatedDate | date:'mediumDate' }}
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </div>
+</div>

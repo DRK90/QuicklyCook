@@ -1,0 +1,10 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  // Full viewport height
+  }
+  
+  .content {
+    flex: 1;  // This ensures the content area grows to fill space, pushing the footer to the bottom
+  }
+  
