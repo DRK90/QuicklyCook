@@ -35,7 +35,6 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "https://app.diagrams.net/js/viewer-static.min.js"
             ]
           },
           "configurations": {
