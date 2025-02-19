@@ -14,7 +14,7 @@ frontend:
         - nvm use 18.19.1
         - npm install -g @angular/cli
         - ng version
-        - if [ "$AWS_BRANCH" == "develop" ]; then ng build --configuration=stage; else ng build --configuration=production; fi
+        - if [ "$AWS_BRANCH" == "develop" ]; then ng build --configuration=staging; else ng build --configuration=production; fi
   artifacts:
     baseDirectory: dist/quickly-cook-ng2/browser  # Updated to match angular.json
     files:
