@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatLabel } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 interface RecipeReturnDto {
   recipeName: string;
   recipeDescription: string;
@@ -35,6 +35,7 @@ interface RecipeReturnDto {
     MatFormFieldModule,
     MatLabel,
     CommonModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']

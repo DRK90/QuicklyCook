@@ -34,7 +34,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "https://app.diagrams.net/js/viewer-static.min.js"
+            ]
           },
           "configurations": {
             "production": {

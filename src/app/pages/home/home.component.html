@@ -1,5 +1,5 @@
 <div class="container home">
-  <h1>Quickly get some cooking inspiration!</h1>
+  <h1>Cooking Inspiration, Quickly!</h1>
   <p>
     Describe what kind of food you want, and we’ll generate a recipe for you!
   </p>
@@ -124,4 +124,13 @@
       </mat-card>
     </div>
   </div>
+</div>
+
+<div class="loading-container" *ngIf="isLoading">
+  <mat-progress-spinner
+    mode="indeterminate"
+    color="primary"
+    diameter="50">
+  </mat-progress-spinner>
+  <p>Loading recipe...</p>
 </div>
