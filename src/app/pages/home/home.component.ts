@@ -77,7 +77,11 @@ export class HomeComponent {
     this.http.get<RecipeReturnDto[]>(`${this.apiUrl}/ExApi/GetRecentRecipes`)
       .subscribe({
         next: (data) => {
-          this.recentRecipes = data.slice(1);
+          if(this.recipe) {
+            this.recentRecipes = data.slice(1);
+          } else {
+            this.recentRecipes = data;
+          }
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error fetching recent recipes:', error);
