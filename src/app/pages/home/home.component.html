@@ -16,6 +16,15 @@
       Search
     </button>
   </div>
+
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-progress-spinner
+      mode="indeterminate"
+      color="primary"
+      diameter="50">
+    </mat-progress-spinner>
+    <p>Loading recipe...</p>
+  </div>
   
   <div class="recipe-result" *ngIf="recipe">
     <mat-card>
@@ -126,11 +135,4 @@
   </div>
 </div>
 
-<div class="loading-container" *ngIf="isLoading">
-  <mat-progress-spinner
-    mode="indeterminate"
-    color="primary"
-    diameter="50">
-  </mat-progress-spinner>
-  <p>Loading recipe...</p>
-</div>
+
