@@ -18,3 +18,14 @@ p {
   line-height: 1.6; 
   margin-bottom: 12px; 
 }
+
+.diagram-container {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
