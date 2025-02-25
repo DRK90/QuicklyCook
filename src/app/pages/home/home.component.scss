@@ -1,138 +1,413 @@
+// Modern color palette
+$primary-color: #3f51b5;
+$primary-light: #e8eaf6;
+$accent-color: #ff4081;
+$text-primary: #333333;
+$text-secondary: #666666;
+$background: #f5f7fa;
+$card-background: #ffffff;
+$border-color: #e0e0e0;
+$success-color: #4caf50;
+$info-color: #2196f3;
+$warning-color: #ff9800;
+$danger-color: #f44336;
+
+// Typography
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+// Global styles for this component
+.home-container {
+  font-family: 'Inter', sans-serif;
+  color: $text-primary;
+  background-color: $card-background;
+  max-width: 1200px;
+  margin: 30px auto;  // Add margin top and bottom
+  border-radius: 16px;  // Rounded corners
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);  // Subtle shadow
+  overflow: hidden;  // Ensures content respects border radius
+  padding: 20px;  // Add padding inside the container
+}
+
+// Hero section
+.hero-section {
+  padding: 60px 20px;
+  text-align: center;
+  
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: $primary-color;
+    line-height: 1.2;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    color: $text-secondary;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.5;
+  }
+}
+
+// Search area
+.search-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  
+  .search-field {
+    width: 100%;
+    margin-bottom: 16px;
+    
+    ::ng-deep .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    
+    input {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .search-button {
+    background-color: $primary-color;
+    color: white;
+    font-size: 1rem;
+    padding: 0 32px;
+    height: 48px;
+    border-radius: 24px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Loading indicator
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  font-size: 16px;
-  color: #555;
-
-  mat-progress-spinner {
-    margin-bottom: 10px;
-  }
-}
-
-
-/* Container styling */
-.container.home {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  padding: 20px;
-}
-
-/* Headings and Paragraphs */
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 16px;
-}
-
-p {
-  font-size: 1.2rem;
-  margin-bottom: 24px;
-}
-
-/* Search Area Layout */
-.search-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-
-.search-field {
-  width: 100%;
-  max-width: 400px;
-}
-
-/* Recipe Result Card */
-.recipe-result {
-  margin-top: 40px;
-  margin-bottom: 10px;
+  margin: 40px auto;
   
-  mat-card {
-    text-align: left;
-    padding: 16px;
-    
-    mat-card-header {
-      border-bottom: 1px solid #ccc;
-    }
-    
-    mat-card-content {
-      margin-top: 16px;
-      
-      .stats {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin: 16px 0;
-        
-        div {
-          flex: 1 1 30%;
-        }
-      }
-      
-      h3 {
-        margin-top: 24px;
-        margin-bottom: 8px;
-      }
-      
-      ul, ol {
-        margin-left: 20px;
-      }
-    }
-    
-    mat-card-footer {
-      text-align: right;
-      font-size: 0.9rem;
-      color: #666;
-      border-top: 1px solid #ccc;
-      margin-top: 16px;
-      padding-top: 8px;
-    }
+  p {
+    margin-top: 16px;
+    color: $text-secondary;
+    font-size: 1rem;
   }
-
-  .recent-recipes {
-    margin-top: 40px;
+  
+  mat-progress-spinner {
+    ::ng-deep .mat-progress-spinner circle {
+      stroke: $primary-color;
+    }
   }
 }
 
+// Section titles
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin: 60px 0 30px;
+  color: $text-primary;
+  position: relative;
+  
+  &:after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background-color: $primary-color;
+    margin: 12px auto 0;
+    border-radius: 2px;
+  }
+}
+
+// Recipe filter toggle
 .recipe-filter {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
-
+  margin: 0 0 40px;
+  
   .mat-button-toggle-group {
-    border-radius: 24px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
+    border-radius: 30px;
+    border: none;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    
     .mat-button-toggle {
-      min-width: 160px;
-      padding: 8px 16px;
+      background-color: $card-background;
+      min-width: 180px;
+      padding: 6px 10px;
+      transition: all 0.2s ease;
       
-      &-button {
+      ::ng-deep .mat-button-toggle-label-content {
+        line-height: 36px;
+        padding: 0 16px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
       }
-
-      .mat-icon {
+      
+      mat-icon {
         margin-right: 8px;
       }
+      
+      &:hover {
+        background-color: $primary-light;
+      }
+      
+      &.mat-button-toggle-checked {
+        background-color: $primary-color;
+        color: white;
+      }
     }
+  }
+}
 
-    // Optional: Add a hover effect
-    .mat-button-toggle:hover {
-      background-color: rgba(0, 0, 0, 0.04);
-      color: #6f7e9b63;
+// Recipes grid layout
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+  gap: 30px;
+  padding: 0 20px;
+}
+
+// Recipe cards
+.recipe-card {
+  background-color: $card-background;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 24px;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Recipe header
+  .recipe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    
+    .recipe-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 4px;
+      color: $text-primary;
     }
+    
+    .recipe-type {
+      display: inline-block;
+      background-color: $primary-light;
+      color: $primary-color;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+  }
+  
+  // Recipe description
+  .recipe-description {
+    font-size: 1rem;
+    color: $text-secondary;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  // Recipe stats
+  .recipe-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 24px;
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      background-color: $background;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      
+      mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+        margin-right: 6px;
+        color: $primary-color;
+      }
+    }
+  }
+  
+  // Recipe content (ingredients and steps)
+  .recipe-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: $text-primary;
+    }
+    
+    ul, ol {
+      margin: 0;
+      padding-left: 20px;
+      
+      li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+        color: $text-secondary;
+      }
+    }
+  }
+  
+  // Notes section
+  .notes {
+    background-color: $primary-light;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: $text-primary;
+    }
+    
+    ul {
+      margin: 0;
+      padding-left: 20px;
+      
+      li {
+        margin-bottom: 8px;
+        line-height: 1.4;
+        color: $text-secondary;
+      }
+    }
+  }
+  
+  // Recipe footer
+  .recipe-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid $border-color;
+    
+    .recipe-date {
+      font-size: 0.85rem;
+      color: $text-secondary;
+    }
+    
+    .recipe-actions {
+      display: flex;
+      gap: 8px;
+      
+      .action-button {
+        display: flex;
+        align-items: center;
+        padding: 4px 12px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        
+        mat-icon {
+          font-size: 18px;
+          height: 18px;
+          width: 18px;
+          margin-right: 4px;
+        }
+        
+        &.edit {
+          color: $info-color;
+          
+          &:hover {
+            background-color: rgba($info-color, 0.1);
+          }
+        }
+        
+        &.save {
+          color: $success-color;
+          
+          &:hover {
+            background-color: rgba($success-color, 0.1);
+          }
+        }
+        
+        &.delete {
+          color: $danger-color;
+          
+          &:hover {
+            background-color: rgba($danger-color, 0.1);
+          }
+        }
+      }
+    }
+  }
+}
 
-    // Style for the selected toggle
-    .mat-button-toggle-checked {
-      background-color: #6f7e9b63;
-      color: white;
+// Single recipe result container
+.recipe-result-container {
+  padding: 0 20px;
+  
+  .recipe-card {
+    max-width: 800px;
+    margin: 0 auto 40px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 20px;
+    
+    h1 {
+      font-size: 2.2rem;
+    }
+    
+    .subtitle {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .recipe-filter {
+    .mat-button-toggle-group {
+      .mat-button-toggle {
+        min-width: 140px;
+      }
+    }
+  }
+  
+  .recipe-card {
+    .recipe-header {
+      flex-direction: column;
+      
+      .recipe-title {
+        font-size: 1.3rem;
+      }
     }
   }
 }

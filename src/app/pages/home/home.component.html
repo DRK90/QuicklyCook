@@ -1,145 +1,178 @@
-<div class="container home">
-  <h1>Cooking Inspiration, Quickly!</h1>
-  <p>
-    Describe what kind of food you want, and we’ll generate a recipe for you!
-  </p>
-  
-  <div class="search-area">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Recipe Idea</mat-label>
-      <input
-        matInput
-        placeholder="E.g., Spicy Chicken Curry"
-        [(ngModel)]="recipeQuery" />
-    </mat-form-field>
-    <button mat-raised-button color="accent" (click)="onSearch()">
-      Search
-    </button>
+<div class="home-container">
+  <div class="hero-section">
+    <h1>Cooking Inspiration, Quickly!</h1>
+    <p class="subtitle">Describe what kind of food you want, and we'll generate a recipe for you.</p>
+    
+    <div class="search-area">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>What would you like to cook?</mat-label>
+        <input
+          matInput
+          placeholder="E.g., Spicy Chicken Curry"
+          [(ngModel)]="recipeQuery" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button mat-flat-button class="search-button" (click)="onSearch()">
+        Generate Recipe
+      </button>
+    </div>
   </div>
 
   <div class="loading-container" *ngIf="isLoading">
-    <mat-progress-spinner
-      mode="indeterminate"
-      color="primary"
-      diameter="50">
-    </mat-progress-spinner>
-    <p>Loading recipe...</p>
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Creating your recipe...</p>
   </div>
   
-  <div class="recipe-result" *ngIf="recipe">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{ recipe.recipeName }}</mat-card-title>
-        <mat-card-subtitle>{{ recipe.recipeType }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <p>{{ recipe.recipeDescription }}</p>
-        
-        <div class="stats">
-          <div><strong>Prep Time:</strong> {{ recipe.recipePrepTime }} min</div>
-          <div><strong>Cook Time:</strong> {{ recipe.recipeCookTime }} min</div>
-          <div><strong>User Rating:</strong> {{ recipe.userRecipeRating }}/5</div>
-          <div><strong>Avg Rating:</strong> {{ recipe.averageRecipeRating }}/5</div>
+  <!-- Main Recipe Result -->
+  <div class="recipe-result-container" *ngIf="recipe">
+    <h2 class="section-title">Your Generated Recipe</h2>
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <div>
+          <h2 class="recipe-title">{{ recipe.recipeName }}</h2>
+          <span class="recipe-type">{{ recipe.recipeType }}</span>
         </div>
-        
+      </div>
+      
+      <p class="recipe-description">{{ recipe.recipeDescription }}</p>
+      
+      <div class="recipe-stats">
+        <div class="stat-item">
+          <mat-icon>timer</mat-icon>
+          <span><strong>Prep:</strong> {{ recipe.recipePrepTime }} min</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon>outdoor_grill</mat-icon>
+          <span><strong>Cook:</strong> {{ recipe.recipeCookTime }} min</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon>star</mat-icon>
+          <span><strong>Rating:</strong> {{ recipe.averageRecipeRating }}/5</span>
+        </div>
+      </div>
+      
+      <div class="recipe-content">
         <div class="ingredients" *ngIf="recipe.ingredients?.length">
           <h3>Ingredients</h3>
           <ul>
             <li *ngFor="let ingredient of recipe.ingredients">
-              {{ ingredient.ingredientQuantity }} – {{ ingredient.ingredientName }}
+              {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientName }}
             </li>
           </ul>
         </div>
         
         <div class="steps" *ngIf="recipe.recipeSteps?.length">
-          <h3>Recipe Steps</h3>
+          <h3>Instructions</h3>
           <ol>
             <li *ngFor="let step of recipe.recipeSteps">
               {{ step.stepDescription }}
             </li>
           </ol>
         </div>
-        
-        <div class="notes" *ngIf="recipe.recipeNotes?.length">
-          <h3>Notes</h3>
-          <ul>
-            <li *ngFor="let note of recipe.recipeNotes">
-              {{ note }}
-            </li>
-          </ul>
+      </div>
+      
+      <div class="notes" *ngIf="recipe.recipeNotes?.length">
+        <h3>Chef's Notes</h3>
+        <ul>
+          <li *ngFor="let note of recipe.recipeNotes">{{ note }}</li>
+        </ul>
+      </div>
+      
+      <div class="recipe-footer">
+        <span class="recipe-date">Created on {{ recipe.recipeCreatedDate | date:'mediumDate' }}</span>
+        <div class="recipe-actions">
+          <button mat-button class="action-button edit">
+            <mat-icon>edit</mat-icon> Edit
+          </button>
+          <button mat-button class="action-button save">
+            <mat-icon>bookmark</mat-icon> Save
+          </button>
         </div>
-      </mat-card-content>
-      <mat-card-footer>
-        Created on: {{ recipe.recipeCreatedDate | date:'mediumDate' }}
-      </mat-card-footer>
-    </mat-card>
+      </div>
+    </div>
   </div>
 
-  <!--RECENT RECIPE SECTION-->
-  <div class="recipe-filter">
-    <mat-button-toggle-group #recipeView="matButtonToggleGroup" value="recent">
-      <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
-        <mat-icon>public</mat-icon>
-        Recent Recipes
-      </mat-button-toggle>
-      <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
-        <mat-icon>person</mat-icon>
-        My Recipes
-      </mat-button-toggle>
-    </mat-button-toggle-group>
-  </div>
-  
-  <div class="recipe-list" *ngIf="recentRecipes && recentRecipes.length">
-    <h2>Recent Recipes</h2>
-    <div *ngFor="let rec of recentRecipes" class="recipe-result">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ rec.recipeName }}</mat-card-title>
-          <mat-card-subtitle>{{ rec.recipeType }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>{{ rec.recipeDescription }}</p>
-          
-          <div class="stats">
-            <div><strong>Prep Time:</strong> {{ rec.recipePrepTime }} min</div>
-            <div><strong>Cook Time:</strong> {{ rec.recipeCookTime }} min</div>
-            <div><strong>User Rating:</strong> {{ rec.userRecipeRating }}/5</div>
-            <div><strong>Avg Rating:</strong> {{ rec.averageRecipeRating }}/5</div>
+  <!-- Browse Recipes Section -->
+  <div class="browse-recipes-section">
+    <h2 class="section-title">Browse Recipes</h2>
+    <div class="recipe-filter">
+      <mat-button-toggle-group #recipeView="matButtonToggleGroup">
+        <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
+          <mat-icon>public</mat-icon>
+          Trending Recipes
+        </mat-button-toggle>
+        <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
+          <mat-icon>person</mat-icon>
+          My Recipes
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    
+    <div class="recipes-grid" *ngIf="recentRecipes && recentRecipes.length">
+      <div *ngFor="let rec of recentRecipes" class="recipe-card">
+        <div class="recipe-header">
+          <div>
+            <h2 class="recipe-title">{{ rec.recipeName }}</h2>
+            <span class="recipe-type">{{ rec.recipeType }}</span>
           </div>
-          
+        </div>
+        
+        <p class="recipe-description">{{ rec.recipeDescription }}</p>
+        
+        <div class="recipe-stats">
+          <div class="stat-item">
+            <mat-icon>timer</mat-icon>
+            <span><strong>Prep:</strong> {{ rec.recipePrepTime }} min</span>
+          </div>
+          <div class="stat-item">
+            <mat-icon>outdoor_grill</mat-icon>
+            <span><strong>Cook:</strong> {{ rec.recipeCookTime }} min</span>
+          </div>
+          <div class="stat-item">
+            <mat-icon>star</mat-icon>
+            <span><strong>Rating:</strong> {{ rec.averageRecipeRating }}/5</span>
+          </div>
+        </div>
+        
+        <div class="recipe-content">
           <div class="ingredients" *ngIf="rec.ingredients?.length">
             <h3>Ingredients</h3>
             <ul>
               <li *ngFor="let ingredient of rec.ingredients">
-                {{ ingredient.ingredientQuantity }} – {{ ingredient.ingredientName }}
+                {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientName }}
               </li>
             </ul>
           </div>
           
           <div class="steps" *ngIf="rec.recipeSteps?.length">
-            <h3>Recipe Steps</h3>
+            <h3>Instructions</h3>
             <ol>
               <li *ngFor="let step of rec.recipeSteps">
                 {{ step.stepDescription }}
               </li>
             </ol>
           </div>
-          
-          <div class="notes" *ngIf="rec.recipeNotes?.length">
-            <h3>Notes</h3>
-            <ul>
-              <li *ngFor="let note of rec.recipeNotes">
-                {{ note }}
-              </li>
-            </ul>
+        </div>
+        
+        <div class="recipe-footer">
+          <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
+          <div class="recipe-actions">
+            <button mat-button *ngIf="recipeView.value === 'my'" class="action-button edit">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            
+            <!-- Only show Save button for Recent Recipes -->
+            <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save">
+              <mat-icon>bookmark</mat-icon> Save
+            </button>
+            
+            <!-- Only show Delete button for My Recipes -->
+            <button *ngIf="recipeView.value === 'my'" mat-button class="action-button delete">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
           </div>
-        </mat-card-content>
-        <mat-card-footer>
-          Created on: {{ rec.recipeCreatedDate | date:'mediumDate' }}
-        </mat-card-footer>
-      </mat-card>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-
