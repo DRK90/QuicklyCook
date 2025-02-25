@@ -76,10 +76,17 @@
   </div>
 
   <!--RECENT RECIPE SECTION-->
-  <div class="recent-recipes">
-    <button mat-raised-button color="primary" (click)="onShowMoreRecentRecipes()">
-      Show More Recent Recipes
-    </button>
+  <div class="recipe-filter">
+    <mat-button-toggle-group #recipeView="matButtonToggleGroup" value="recent">
+      <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
+        <mat-icon>public</mat-icon>
+        Recent Recipes
+      </mat-button-toggle>
+      <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
+        <mat-icon>person</mat-icon>
+        My Recipes
+      </mat-button-toggle>
+    </mat-button-toggle-group>
   </div>
   
   <div class="recipe-list" *ngIf="recentRecipes && recentRecipes.length">
