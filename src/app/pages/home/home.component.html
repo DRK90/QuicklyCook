@@ -139,7 +139,7 @@
             <h3>Ingredients</h3>
             <ul>
               <li *ngFor="let ingredient of rec.ingredients">
-                {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientName }}
+                {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientUnit }} {{ ingredient.ingredientName }}
               </li>
             </ul>
           </div>
@@ -153,6 +153,13 @@
             </ol>
           </div>
         </div>
+
+        <div class="notes" *ngIf="rec.recipeNotes?.length">
+          <h3>Chef's Notes</h3>
+          <ul>
+            <li *ngFor="let note of rec.recipeNotes">{{ note }}</li>
+          </ul>
+        </div>
         
         <div class="recipe-footer">
           <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
@@ -162,7 +169,7 @@
             </button>
             
             <!-- Only show Save button for Recent Recipes -->
-            <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save">
+            <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save" (click)="saveRecipe(rec.recipeId)">
               <mat-icon>bookmark</mat-icon> Save
             </button>
             

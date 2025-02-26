@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 interface RecipeReturnDto {
+  recipeId: number;
   recipeName: string;
   recipeDescription: string;
   recipeType: string;
@@ -24,7 +25,7 @@ interface RecipeReturnDto {
   recipePrepTime: number;
   recipeCookTime: number;
   recipeCreatedDate: string; // ISO date string
-  ingredients: { ingredientId: number; ingredientName: string; ingredientQuantity: string }[];
+  ingredients: { ingredientId: number; ingredientName: string; ingredientQuantity: number; ingredientUnit: string }[];
   recipeSteps: { stepNumber: number; stepDescription: string }[];
 }
 
@@ -123,5 +124,30 @@ export class HomeComponent implements OnInit {
           console.error('Error fetching recent recipes:', error);
         }
       });
+  }
+
+  saveRecipe(recipeId: number): void {
+    if (!this.userId) {
+      console.error('User ID is not available');
+      return;
+    }
+
+    const payload = {
+      userId: this.userId,
+      recipeId: recipeId
+    };
+
+    console.log(payload);
+
+    this.http.post(`${this.apiUrl}/ExApi/SaveRecipe`, payload).subscribe(
+      response => {
+        console.log('Recipe saved successfully:', response);
+        // Optionally, you can show a success message or update the UI
+      },
+      error => {
+        console.error('Error saving recipe:', error);
+        // Optionally, handle the error (e.g., show an error message)
+      }
+    );
   }
 }
