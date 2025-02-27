@@ -220,336 +220,128 @@
     </div>
   </div>
 
-  <!-- Browse Recipes Section -->
-  <div class="browse-recipes-section">
-    <h2 class="section-title">Browse Recipes</h2>
-    <div class="recipe-filter">
-      <mat-button-toggle-group #recipeView="matButtonToggleGroup">
-        <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
-          <mat-icon>public</mat-icon>
-          Recent Recipes
-        </mat-button-toggle>
-        <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
-          <mat-icon>person</mat-icon>
-          My Recipes
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    
-    <div class="recipes-grid" *ngIf="recentRecipes && recentRecipes.length">
-      <div *ngFor="let rec of recentRecipes" class="recipe-card" [class.editing]="rec.isEditing">
-        <div class="recipe-header">
-          <div>
-            <!-- Title: View mode -->
-            <h2 *ngIf="!rec.isEditing" class="recipe-title">{{ rec.recipeName }}</h2>
-            <!-- Title: Edit mode -->
-            <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field title-field">
-              <mat-label>Recipe Name</mat-label>
-              <input matInput [(ngModel)]="rec.editData.recipeName">
-            </mat-form-field>
-            
-            <!-- Type: View mode -->
-            <span *ngIf="!rec.isEditing" class="recipe-type">{{ rec.recipeType }}</span>
-            <!-- Type: Edit mode -->
-            <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field type-field">
-              <mat-label>Recipe Type</mat-label>
-              <input matInput [(ngModel)]="rec.editData.recipeType">
-            </mat-form-field>
-          </div>
-        </div>
-        
-        <!-- Description: View mode -->
-        <p *ngIf="!rec.isEditing" class="recipe-description">{{ rec.recipeDescription }}</p>
-        <!-- Description: Edit mode -->
-        <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field description-field">
-          <mat-label>Description</mat-label>
-          <textarea matInput [(ngModel)]="rec.editData.recipeDescription" rows="3"></textarea>
-        </mat-form-field>
-        
-        <!-- Recipe Stats -->
-        <div class="recipe-stats">
-          <!-- Prep time: View mode -->
-          <div *ngIf="!rec.isEditing" class="stat-item">
-            <mat-icon>timer</mat-icon>
-            <span><strong>Prep:</strong> {{ rec.recipePrepTime }} min</span>
-          </div>
-          <!-- Prep time: Edit mode -->
-          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
-            <mat-label>Prep Time (min)</mat-label>
-            <input matInput type="number" [(ngModel)]="rec.editData.recipePrepTime">
+  <!-- Browse Recipes Section with a single toggle -->
+<div class="browse-recipes-section">
+  <h2 class="section-title">Browse Recipes</h2>
+  <div class="recipe-filter">
+    <mat-button-toggle-group #recipeView="matButtonToggleGroup">
+      <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
+        <mat-icon>public</mat-icon>
+        Trending Recipes
+      </mat-button-toggle>
+      <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
+        <mat-icon>person</mat-icon>
+        My Recipes
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  
+  <!-- Recipes list always displayed as a column -->
+  <div class="recipes-grid" *ngIf="recentRecipes && recentRecipes.length">
+    <div *ngFor="let rec of recentRecipes" class="recipe-card" [class.editing]="rec.isEditing">
+      
+      <!-- Recipe Header -->
+      <div class="recipe-header">
+        <div>
+          <!-- Title: View mode -->
+          <h2 *ngIf="!rec.isEditing" class="recipe-title">{{ rec.recipeName }}</h2>
+          <!-- Title: Edit mode -->
+          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field title-field">
+            <mat-label>Recipe Name</mat-label>
+            <input matInput [(ngModel)]="rec.editData.recipeName">
           </mat-form-field>
           
-          <!-- Cook time: View mode -->
-          <div *ngIf="!rec.isEditing" class="stat-item">
-            <mat-icon>outdoor_grill</mat-icon>
-            <span><strong>Cook:</strong> {{ rec.recipeCookTime }} min</span>
-          </div>
-          <!-- Cook time: Edit mode -->
-          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
-            <mat-label>Cook Time (min)</mat-label>
-            <input matInput type="number" [(ngModel)]="rec.editData.recipeCookTime">
+          <!-- Type: View mode -->
+          <span *ngIf="!rec.isEditing" class="recipe-type">{{ rec.recipeType }}</span>
+          <!-- Type: Edit mode -->
+          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field type-field">
+            <mat-label>Recipe Type</mat-label>
+            <input matInput [(ngModel)]="rec.editData.recipeType">
           </mat-form-field>
-          
-          <!-- Rating: Always in view mode -->
-          <div class="stat-item">
-            <mat-icon>star</mat-icon>
-            <span><strong>Rating:</strong> {{ rec.averageRecipeRating }}/5</span>
-          </div>
-        </div>
-        
-        <!-- Recipe Content -->
-        <div class="recipe-content">
-          <!-- Ingredients section -->
-          <div class="ingredients" *ngIf="rec.ingredients?.length">
-            <h3>Ingredients</h3>
-            <ul *ngIf="!rec.isEditing">
-              <li *ngFor="let ingredient of rec.ingredients">
-                {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientUnit }} {{ ingredient.ingredientName }}
-              </li>
-            </ul>
-            
-            <!-- Ingredients: Edit mode -->
-            <div *ngIf="rec.isEditing" class="ingredients-edit">
-              <div *ngFor="let ingredient of rec.editData.ingredients; let ingIndex = index" class="ingredient-edit-row">
-                <mat-form-field appearance="outline" class="quantity-field">
-                  <mat-label>Qty</mat-label>
-                  <input matInput type="number" [(ngModel)]="ingredient.ingredientQuantity">
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="unit-field">
-                  <mat-label>Unit</mat-label>
-                  <input matInput [(ngModel)]="ingredient.ingredientUnit">
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="ingredient-field">
-                  <mat-label>Ingredient</mat-label>
-                  <input matInput [(ngModel)]="ingredient.ingredientName">
-                </mat-form-field>
-                
-                <button mat-icon-button color="warn" (click)="removeIngredient(rec, ingIndex)">
-                  <mat-icon>remove_circle</mat-icon>
-                </button>
-              </div>
-              
-              <button mat-stroked-button color="primary" class="add-item-btn" (click)="addIngredient(rec)">
-                <mat-icon>add</mat-icon> Add Ingredient
-              </button>
-            </div>
-          </div>
-          
-          <!-- Steps section -->
-          <div class="steps" *ngIf="rec.recipeSteps?.length">
-            <h3>Instructions</h3>
-            <ol *ngIf="!rec.isEditing">
-              <li *ngFor="let step of rec.recipeSteps">
-                {{ step.stepDescription }}
-              </li>
-            </ol>
-            
-            <!-- Steps: Edit mode -->
-            <div *ngIf="rec.isEditing" class="steps-edit">
-              <div *ngFor="let step of rec.editData.recipeSteps; let stepIndex = index" class="step-edit-row">
-                <div class="step-number">{{ stepIndex + 1 }}.</div>
-                
-                <mat-form-field appearance="outline" class="step-field">
-                  <mat-label>Instruction</mat-label>
-                  <textarea matInput [(ngModel)]="step.stepDescription" rows="2"></textarea>
-                </mat-form-field>
-                
-                <button mat-icon-button color="warn" (click)="removeStep(rec, stepIndex)">
-                  <mat-icon>remove_circle</mat-icon>
-                </button>
-              </div>
-              
-              <button mat-stroked-button color="primary" class="add-item-btn" (click)="addStep(rec)">
-                <mat-icon>add</mat-icon> Add Step
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Notes section -->
-        <div class="notes" *ngIf="rec.recipeNotes?.length">
-          <h3>Chef's Notes</h3>
-          <ul *ngIf="!rec.isEditing">
-            <li *ngFor="let note of rec.recipeNotes">{{ note }}</li>
-          </ul>
-          
-          <!-- Notes: Edit mode -->
-          <div *ngIf="rec.isEditing" class="notes-edit">
-            <div *ngFor="let note of rec.editData.recipeNotes; let noteIndex = index" class="note-edit-row">
-              <mat-form-field appearance="outline" class="note-field">
-                <mat-label>Note</mat-label>
-                <input matInput [(ngModel)]="rec.editData.recipeNotes[noteIndex]">
-              </mat-form-field>
-              
-              <button mat-icon-button color="warn" (click)="removeNote(rec, noteIndex)">
-                <mat-icon>remove_circle</mat-icon>
-              </button>
-            </div>
-            
-            <button mat-stroked-button color="primary" class="add-item-btn" (click)="addNote(rec)">
-              <mat-icon>add</mat-icon> Add Note
-            </button>
-          </div>
-        </div>
-        
-        <!-- Recipe Footer -->
-        <div class="recipe-footer">
-          <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
-          
-          <!-- Action buttons -->
-          <div class="recipe-actions">
-            <!-- Normal mode buttons -->
-            <ng-container *ngIf="!rec.isEditing">
-              <button mat-button class="action-button edit" (click)="startEditing(rec)">
-                <mat-icon>edit</mat-icon> Edit
-              </button>
-              
-              <!-- Only show Save button for Recent Recipes -->
-              <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save" (click)="saveRecipe(rec.recipeId)">
-                <mat-icon>bookmark</mat-icon> Save
-              </button>
-              
-              <!-- Only show Delete button for My Recipes -->
-              <button *ngIf="recipeView.value === 'my'" mat-button class="action-button delete">
-                <mat-icon>delete</mat-icon> Delete
-              </button>
-            </ng-container>
-            
-            <!-- Edit mode buttons -->
-            <ng-container *ngIf="rec.isEditing">
-              <button mat-button class="action-button save-edit" (click)="saveEdits(rec)">
-                <mat-icon>check</mat-icon> Save Changes
-              </button>
-              <button mat-button class="action-button cancel-edit" (click)="cancelEditing(rec)">
-                <mat-icon>close</mat-icon> Cancel
-              </button>
-            </ng-container>
-          </div>
         </div>
       </div>
-    </div>
-  </div>
+      
+      <!-- Description -->
+      <p *ngIf="!rec.isEditing" class="recipe-description">{{ rec.recipeDescription }}</p>
+      <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field description-field">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="rec.editData.recipeDescription" rows="3"></textarea>
+      </mat-form-field>
+      
+      <!-- Recipe Stats (prep, cook, rating) -->
+      <div class="recipe-stats">
+        <!-- Prep time -->
+        <div *ngIf="!rec.isEditing" class="stat-item">
+          <mat-icon>timer</mat-icon>
+          <span><strong>Prep:</strong> {{ rec.recipePrepTime }} min</span>
+        </div>
+        <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
+          <mat-label>Prep Time (min)</mat-label>
+          <input matInput type="number" [(ngModel)]="rec.editData.recipePrepTime">
+        </mat-form-field>
+        <!-- Cook time -->
+        <div *ngIf="!rec.isEditing" class="stat-item">
+          <mat-icon>outdoor_grill</mat-icon>
+          <span><strong>Cook:</strong> {{ rec.recipeCookTime }} min</span>
+        </div>
+        <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
+          <mat-label>Cook Time (min)</mat-label>
+          <input matInput type="number" [(ngModel)]="rec.editData.recipeCookTime">
+        </mat-form-field>
+        <!-- Rating (always view only) -->
+        <div class="stat-item" *ngIf="!rec.isEditing">
+          <mat-icon>star</mat-icon>
+          <span><strong>Rating:</strong> {{ rec.averageRecipeRating }}/5</span>
+        </div>
+      </div>
+      
+      <!-- Recipe Content -->
+      <div class="recipe-content">
+        <!-- Ingredients Section -->
+        <div class="ingredients" *ngIf="rec.ingredients?.length">
+          <h3>Ingredients</h3>
+          <ul *ngIf="!rec.isEditing">
+            <li *ngFor="let ingredient of rec.ingredients">
+              {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientUnit }} {{ ingredient.ingredientName }}
+            </li>
+          </ul>
+          <!-- Ingredients: Edit mode -->
+          <div *ngIf="rec.isEditing" class="ingredients-edit">
+            <div *ngFor="let ingredient of rec.editData.ingredients; let ingIndex = index" class="ingredient-edit-row">
+              <!-- Row 1: Ingredient Name -->
+              <div class="ingredient-name-row">
 
-  <!-- Browse Recipes Section -->
-  <div class="browse-recipes-section">
-    <h2 class="section-title">Browse Recipes</h2>
-    <div class="recipe-filter">
-      <mat-button-toggle-group #recipeView="matButtonToggleGroup">
-        <mat-button-toggle value="recent" (click)="onShowMoreRecentRecipes()">
-          <mat-icon>public</mat-icon>
-          Recent Recipes
-        </mat-button-toggle>
-        <mat-button-toggle value="my" (click)="onShowMoreUserRecipes()">
-          <mat-icon>person</mat-icon>
-          My Recipes
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    
-    <div class="recipes-grid" *ngIf="recentRecipes && recentRecipes.length">
-      <div *ngFor="let rec of recentRecipes" class="recipe-card" [class.editing]="rec.isEditing">
-        <div class="recipe-header">
-          <div>
-            <!-- Title: View mode -->
-            <h2 *ngIf="!rec.isEditing" class="recipe-title">{{ rec.recipeName }}</h2>
-            <!-- Title: Edit mode -->
-            <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field title-field">
-              <mat-label>Recipe Name</mat-label>
-              <input matInput [(ngModel)]="rec.editData.recipeName">
-            </mat-form-field>
+                <mat-form-field appearance="outline" class="edit-field ingredient-field full-width">
+                  <mat-label>Ingredient</mat-label>
+                  <input matInput [(ngModel)]="ingredient.ingredientName">  
+
+                </mat-form-field>
+                <button mat-icon-button color="warn" (click)="removeIngredient(rec, ingIndex)">
+                  <mat-icon>remove_circle</mat-icon>
+                </button>  
             
-            <!-- Type: View mode -->
-            <span *ngIf="!rec.isEditing" class="recipe-type">{{ rec.recipeType }}</span>
-            <!-- Type: Edit mode -->
-            <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field type-field">
-              <mat-label>Recipe Type</mat-label>
-              <input matInput [(ngModel)]="rec.editData.recipeType">
-            </mat-form-field>
-          </div>
-        </div>
-        
-        <!-- Description: View mode -->
-        <p *ngIf="!rec.isEditing" class="recipe-description">{{ rec.recipeDescription }}</p>
-        <!-- Description: Edit mode -->
-        <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field description-field">
-          <mat-label>Description</mat-label>
-          <textarea matInput [(ngModel)]="rec.editData.recipeDescription" rows="3"></textarea>
-        </mat-form-field>
-        
-        <!-- Recipe Stats -->
-        <div class="recipe-stats">
-          <!-- Prep time: View mode -->
-          <div *ngIf="!rec.isEditing" class="stat-item">
-            <mat-icon>timer</mat-icon>
-            <span><strong>Prep:</strong> {{ rec.recipePrepTime }} min</span>
-          </div>
-          <!-- Prep time: Edit mode -->
-          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
-            <mat-label>Prep Time (min)</mat-label>
-            <input matInput type="number" [(ngModel)]="rec.editData.recipePrepTime">
-          </mat-form-field>
-          
-          <!-- Cook time: View mode -->
-          <div *ngIf="!rec.isEditing" class="stat-item">
-            <mat-icon>outdoor_grill</mat-icon>
-            <span><strong>Cook:</strong> {{ rec.recipeCookTime }} min</span>
-          </div>
-          <!-- Cook time: Edit mode -->
-          <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
-            <mat-label>Cook Time (min)</mat-label>
-            <input matInput type="number" [(ngModel)]="rec.editData.recipeCookTime">
-          </mat-form-field>
-          
-          <!-- Rating: Always in view mode -->
-          <div class="stat-item">
-            <mat-icon>star</mat-icon>
-            <span><strong>Rating:</strong> {{ rec.averageRecipeRating }}/5</span>
-          </div>
-        </div>
-        
-        <!-- Recipe Content -->
-        <div class="recipe-content">
-          <!-- Ingredients section -->
-          <div class="ingredients" *ngIf="rec.ingredients?.length">
-            <h3>Ingredients</h3>
-            <ul *ngIf="!rec.isEditing">
-              <li *ngFor="let ingredient of rec.ingredients">
-                {{ ingredient.ingredientQuantity }} {{ ingredient.ingredientUnit }} {{ ingredient.ingredientName }}
-              </li>
-            </ul>
-            
-            <!-- Ingredients: Edit mode -->
-            <div *ngIf="rec.isEditing" class="ingredients-edit">
-              <div *ngFor="let ingredient of rec.editData.ingredients; let ingIndex = index" class="ingredient-edit-row">
-                <mat-form-field appearance="outline" class="quantity-field">
+
+              </div>
+              <!-- Row 2: Quantity and Unit -->
+              <div class="quantity-unit-row">
+                <mat-form-field appearance="outline" class="edit-field quantity-field">
                   <mat-label>Qty</mat-label>
                   <input matInput type="number" [(ngModel)]="ingredient.ingredientQuantity">
                 </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="unit-field">
+                <mat-form-field appearance="outline" class="edit-field unit-field">
                   <mat-label>Unit</mat-label>
                   <input matInput [(ngModel)]="ingredient.ingredientUnit">
                 </mat-form-field>
-                
-                <mat-form-field appearance="outline" class="ingredient-field">
-                  <mat-label>Ingredient</mat-label>
-                  <input matInput [(ngModel)]="ingredient.ingredientName">
-                </mat-form-field>
-                
-                <button mat-icon-button color="warn" (click)="removeIngredient(rec, ingIndex)">
-                  <mat-icon>remove_circle</mat-icon>
-                </button>
               </div>
-              
-              <button mat-stroked-button color="primary" class="add-item-btn" (click)="addIngredient(rec)">
-                <mat-icon>add</mat-icon> Add Ingredient
-              </button>
             </div>
+            
+            <button mat-stroked-button color="primary" class="add-item-btn" (click)="addIngredient(rec)">
+              <mat-icon>add</mat-icon> Add Ingredient
+            </button>
           </div>
+
           
-          <!-- Steps section -->
+          <!-- Steps Section -->
           <div class="steps" *ngIf="rec.recipeSteps?.length">
             <h3>Instructions</h3>
             <ol *ngIf="!rec.isEditing">
@@ -557,22 +349,17 @@
                 {{ step.stepDescription }}
               </li>
             </ol>
-            
-            <!-- Steps: Edit mode -->
             <div *ngIf="rec.isEditing" class="steps-edit">
               <div *ngFor="let step of rec.editData.recipeSteps; let stepIndex = index" class="step-edit-row">
                 <div class="step-number">{{ stepIndex + 1 }}.</div>
-                
                 <mat-form-field appearance="outline" class="step-field">
                   <mat-label>Instruction</mat-label>
                   <textarea matInput [(ngModel)]="step.stepDescription" rows="2"></textarea>
                 </mat-form-field>
-                
                 <button mat-icon-button color="warn" (click)="removeStep(rec, stepIndex)">
                   <mat-icon>remove_circle</mat-icon>
                 </button>
               </div>
-              
               <button mat-stroked-button color="primary" class="add-item-btn" (click)="addStep(rec)">
                 <mat-icon>add</mat-icon> Add Step
               </button>
@@ -580,67 +367,62 @@
           </div>
         </div>
         
-        <!-- Notes section -->
+        <!-- Notes Section -->
         <div class="notes" *ngIf="rec.recipeNotes?.length">
           <h3>Chef's Notes</h3>
           <ul *ngIf="!rec.isEditing">
             <li *ngFor="let note of rec.recipeNotes">{{ note }}</li>
           </ul>
-          
-          <!-- Notes: Edit mode -->
           <div *ngIf="rec.isEditing" class="notes-edit">
             <div *ngFor="let note of rec.editData.recipeNotes; let noteIndex = index" class="note-edit-row">
               <mat-form-field appearance="outline" class="note-field">
                 <mat-label>Note</mat-label>
                 <input matInput [(ngModel)]="rec.editData.recipeNotes[noteIndex]">
               </mat-form-field>
-              
               <button mat-icon-button color="warn" (click)="removeNote(rec, noteIndex)">
                 <mat-icon>remove_circle</mat-icon>
               </button>
             </div>
-            
             <button mat-stroked-button color="primary" class="add-item-btn" (click)="addNote(rec)">
               <mat-icon>add</mat-icon> Add Note
             </button>
           </div>
         </div>
-        
-        <!-- Recipe Footer -->
-        <div class="recipe-footer">
-          <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
-          
-          <!-- Action buttons -->
-          <div class="recipe-actions">
-            <!-- Normal mode buttons -->
-            <ng-container *ngIf="!rec.isEditing">
-              <button mat-button class="action-button edit" (click)="startEditing(rec)">
-                <mat-icon>edit</mat-icon> Edit
-              </button>
-              
-              <!-- Only show Save button for Recent Recipes -->
-              <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save" (click)="saveRecipe(rec.recipeId)">
-                <mat-icon>bookmark</mat-icon> Save
-              </button>
-              
-              <!-- Only show Delete button for My Recipes -->
-              <button *ngIf="recipeView.value === 'my'" mat-button class="action-button delete">
-                <mat-icon>delete</mat-icon> Delete
-              </button>
-            </ng-container>
-            
-            <!-- Edit mode buttons -->
-            <ng-container *ngIf="rec.isEditing">
-              <button mat-button class="action-button save-edit" (click)="saveEdits(rec)">
-                <mat-icon>check</mat-icon> Save Changes
-              </button>
-              <button mat-button class="action-button cancel-edit" (click)="cancelEditing(rec)">
-                <mat-icon>close</mat-icon> Cancel
-              </button>
-            </ng-container>
-          </div>
+      </div>
+      
+      <!-- Recipe Footer with Action Buttons -->
+      <div class="recipe-footer">
+        <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
+        <div class="recipe-actions">
+          <!-- For My Recipes only, allow edit/delete; Trending (recent) recipes are view-only -->
+          <ng-container *ngIf="!rec.isEditing && recipeView.value === 'my'">
+            <button mat-button class="action-button edit" (click)="startEditing(rec)">
+              <mat-icon>edit</mat-icon> Edit
+            </button>
+            <button mat-button class="action-button delete">
+              <mat-icon>delete</mat-icon> Delete
+            </button>
+          </ng-container>
+          <!-- For Trending recipes, you might allow a "Save" action -->
+          <ng-container *ngIf="!rec.isEditing && recipeView.value === 'recent'">
+            <button mat-button class="action-button save" (click)="saveRecipe(rec.recipeId)">
+              <mat-icon>bookmark</mat-icon> Save
+            </button>
+          </ng-container>
+          <!-- Edit mode buttons -->
+          <ng-container *ngIf="rec.isEditing">
+            <button mat-button class="action-button save-edit" (click)="saveEdits(rec)">
+              <mat-icon>check</mat-icon> Save Changes
+            </button>
+            <button mat-button class="action-button cancel-edit" (click)="cancelEditing(rec)">
+              <mat-icon>close</mat-icon> Cancel
+            </button>
+          </ng-container>
         </div>
       </div>
+      
     </div>
   </div>
+</div>
+
 </div>

@@ -171,10 +171,10 @@ $danger-color: #f44336;
   }
 }
 
-// Recipes grid layout
+// Recipes grid layout - always in a column
 .recipes-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
   padding: 0 5px;
 }
@@ -453,26 +453,73 @@ $danger-color: #f44336;
     }
   }
   
-  // Ingredient edit section
-  .ingredients-edit, .steps-edit, .notes-edit {
+  // Ingredient edit section - refined layout for editing ingredients
+  .ingredients-edit {
+    margin-bottom: 16px;
+
+    .ingredient-edit-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    // Row 1: Ingredient name row with remove button aligned next to input
+    .ingredient-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .ingredient-field {
+        flex: 1;
+      }
+
+      // Override the inner Material touch target so the button stays centered
+      ::ng-deep button.mat-icon-button .mat-mdc-touch-target {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+    }
+
+    // Row 2: Quantity and Unit in one row
+    .quantity-unit-row {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .quantity-unit-row .quantity-field {
+      flex: 0 0 33%;
+    }
+    
+    .quantity-unit-row .unit-field {
+      flex: 0 0 67%;
+    }
+
+    // On very small screens, stack quantity and unit vertically
+    @media (max-width: 480px) {
+      .quantity-unit-row {
+        flex-direction: column;
+      }
+      
+      .quantity-unit-row .quantity-field,
+      .quantity-unit-row .unit-field {
+        flex: 1 1 100%;
+      }
+    }
+  }
+  
+  // Other edit mode sections (steps and notes) remain unchanged
+  .steps-edit, .notes-edit {
     margin-bottom: 16px;
     
-    .ingredient-edit-row, .step-edit-row, .note-edit-row {
+    .step-edit-row, .note-edit-row {
       display: flex;
       align-items: center;
       margin-bottom: 8px;
       
-      .quantity-field {
-        width: 70px;
-        margin-right: 8px;
-      }
-      
-      .unit-field {
-        width: 90px;
-        margin-right: 8px;
-      }
-      
-      .ingredient-field, .step-field, .note-field {
+      .quantity-field, .unit-field, .step-field, .note-field {
         flex: 1;
       }
       
@@ -535,7 +582,7 @@ $danger-color: #f44336;
   transition: all 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-// Responsive adjustments for edit mode
+// Responsive adjustments for edit mode (for steps and notes stacking)
 @media (max-width: 768px) {
   .recipe-card {
     .ingredients-edit, .steps-edit, .notes-edit {
