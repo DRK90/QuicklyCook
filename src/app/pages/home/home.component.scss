@@ -28,6 +28,40 @@ $danger-color: #f44336;
   padding: 20px;  // Add padding inside the container
 }
 
+.logo-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .logo-image {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .logo-container {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 16px;
+  }
+}
+
 // Hero section
 .hero-section {
   padding: 20px 20px;
