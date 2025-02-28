@@ -25,11 +25,14 @@ interface RecipeReturnDto {
   recipePrepTime: number;
   recipeCookTime: number;
   recipeCreatedDate: string; // ISO date string
-  ingredients: { ingredientId: number; ingredientName: string; ingredientQuantity: number; ingredientUnit: string }[];
+  ingredients: { ingredientId: number; ingredientName: string; ingredientQuantity: number | null; ingredientUnit: string }[];
   recipeSteps: { stepNumber: number; stepDescription: string }[];
+  servings: number;
     // Added for edit functionality
     isEditing?: boolean;
     editData?: any;
+    isEdited?: boolean;
+    editsStored?: boolean;
 }
 
 @Component({
@@ -129,7 +132,51 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  saveRecipe(recipeId: number): void {
+  saveNewRecipe(recipe: RecipeReturnDto): void {
+    if (!this.userId) {
+      console.error('User ID is not available');
+      return;
+    }
+
+    const saveNewRecipePayload = {
+      recipeDto: recipe,
+      recipeRequestDescription: this.recipeQuery
+    };
+
+    console.log(saveNewRecipePayload);
+
+    this.http.post(`${this.apiUrl}/ExApi/SaveNewRecipe`, saveNewRecipePayload).subscribe({
+      next: (response) => {
+        console.log('Recipe saved successfully:', response);
+        this.recipe = null;
+      },
+      error: (error) => {
+        console.error('Error saving recipe:', error);
+      }
+    });
+  }
+
+  deleteUserRecipe(recipe: RecipeReturnDto): void {
+    const deleteUserRecipePayload = {
+      recipeDto: recipe
+    };
+
+    console.log(deleteUserRecipePayload);
+
+    this.http.delete<any>(`${this.apiUrl}/ExApi/DeleteUserRecipe`, { body: deleteUserRecipePayload }).subscribe({
+      next: (response: any) => {
+        console.log('Recipe deleted successfully:', response);
+      },
+      error: (error: any) => {
+        console.error('Error deleting recipe:', error);
+      }
+    });
+
+    //remove the recipe from the recent recipes
+    this.recentRecipes = this.recentRecipes.filter(r => r.recipeId !== recipe.recipeId);
+  }
+
+  saveRecipe(recipe: RecipeReturnDto): void {
     if (!this.userId) {
       console.error('User ID is not available');
       return;
@@ -137,11 +184,27 @@ export class HomeComponent implements OnInit {
 
     const payload = {
       userId: this.userId,
-      recipeId: recipeId
+      recipeId: recipe.recipeId
     };
 
     console.log(payload);
 
+    if(recipe.isEdited) {
+      const updateRecipePayload = {
+        recipeDto: recipe,
+        recipeRequestDescription: "Edited " + recipe.recipeName + ": " + recipe.recipeId
+      };
+      this.http.put(`${this.apiUrl}/ExApi/UpdateRecipe`, updateRecipePayload).subscribe(
+        response => {
+          console.log('Recipe updated successfully:', response);
+          recipe.isEdited = false;
+          recipe.editsStored = true;
+        },
+        error => {  
+          console.error('Error updating recipe:', error);
+        }
+      );
+    } else {
     this.http.post(`${this.apiUrl}/ExApi/SaveRecipe`, payload).subscribe(
       response => {
         console.log('Recipe saved successfully:', response);
@@ -152,6 +215,7 @@ export class HomeComponent implements OnInit {
         // Optionally, handle the error (e.g., show an error message)
       }
     );
+  }
   }
 
   // Start editing a recipe
@@ -164,9 +228,12 @@ startEditing(recipe: RecipeReturnDto): void {
     recipeDescription: recipe.recipeDescription,
     recipePrepTime: recipe.recipePrepTime,
     recipeCookTime: recipe.recipeCookTime,
+    servings: recipe.servings,
     ingredients: recipe.ingredients || [],
     recipeSteps: recipe.recipeSteps || [],
-    recipeNotes: recipe.recipeNotes || []
+    recipeNotes: recipe.recipeNotes || [],
+    isEdited: false,
+    editsStored: false
   }));
 }
 
@@ -187,11 +254,11 @@ saveEdits(recipe: RecipeReturnDto): void {
   recipe.ingredients = recipe.editData.ingredients;
   recipe.recipeSteps = recipe.editData.recipeSteps;
   recipe.recipeNotes = recipe.editData.recipeNotes;
-  
+  recipe.servings = recipe.editData.servings;
   // Exit edit mode
   recipe.isEditing = false;
   recipe.editData = undefined;
-  
+  recipe.isEdited = true;
   // TODO: Call your API to update the recipe
   // this.updateRecipe(recipe);
 }
@@ -238,4 +305,12 @@ addNote(recipe: RecipeReturnDto): void {
 removeNote(recipe: RecipeReturnDto, index: number): void {
   recipe.editData.recipeNotes.splice(index, 1);
 }
+
+deleteNewRecipe(): void {
+  this.recipe = null;
+
 }
+
+
+}
+

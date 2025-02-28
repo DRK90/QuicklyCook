@@ -78,6 +78,16 @@
           <mat-label>Cook Time (min)</mat-label>
           <input matInput type="number" [(ngModel)]="recipe.editData.recipeCookTime">
         </mat-form-field>
+
+        <!-- Servings -->
+        <div *ngIf="!recipe.isEditing" class="stat-item">
+          <mat-icon>restaurant</mat-icon>
+          <span><strong>Servings:</strong> {{ recipe.servings }}</span>
+        </div>
+        <mat-form-field *ngIf="recipe.isEditing" appearance="outline" class="edit-field stat-field">
+          <mat-label>Servings</mat-label>
+          <input matInput type="number" [(ngModel)]="recipe.editData.servings">
+        </mat-form-field>
         
         <!-- Rating: Always in view mode -->
         <div class="stat-item">
@@ -196,12 +206,12 @@
             </button>
             
             <!-- Only show Save button for Recent Recipes -->
-            <button *ngIf="recipeView.value === 'recent'" mat-button class="action-button save" (click)="saveRecipe(recipe.recipeId)">
+            <button mat-button class="action-button save" (click)="saveNewRecipe(recipe)">
               <mat-icon>bookmark</mat-icon> Save
             </button>
             
             <!-- Only show Delete button for My Recipes -->
-            <button *ngIf="recipeView.value === 'my'" mat-button class="action-button delete">
+            <button mat-button class="action-button delete" (click)="deleteNewRecipe()">
               <mat-icon>delete</mat-icon> Delete
             </button>
           </ng-container>
@@ -288,6 +298,16 @@
           <mat-label>Cook Time (min)</mat-label>
           <input matInput type="number" [(ngModel)]="rec.editData.recipeCookTime">
         </mat-form-field>
+        <!-- Servings -->
+        <div *ngIf="!rec.isEditing" class="stat-item">
+          <mat-icon>restaurant</mat-icon>
+          <span><strong>Servings:</strong> {{ rec.servings }}</span>
+        </div>
+        <mat-form-field *ngIf="rec.isEditing" appearance="outline" class="edit-field stat-field">
+          <mat-label>Servings</mat-label>
+          <input matInput type="number" [(ngModel)]="rec.editData.servings">
+        </mat-form-field>
+        
         <!-- Rating (always view only) -->
         <div class="stat-item" *ngIf="!rec.isEditing">
           <mat-icon>star</mat-icon>
@@ -395,17 +415,17 @@
         <span class="recipe-date">Created on {{ rec.recipeCreatedDate | date:'mediumDate' }}</span>
         <div class="recipe-actions">
           <!-- For My Recipes only, allow edit/delete; Trending (recent) recipes are view-only -->
-          <ng-container *ngIf="!rec.isEditing && recipeView.value === 'my'">
+          <ng-container *ngIf="!rec.isEditing && recipeView.value === 'my' && !rec.editsStored">
             <button mat-button class="action-button edit" (click)="startEditing(rec)">
               <mat-icon>edit</mat-icon> Edit
             </button>
-            <button mat-button class="action-button delete">
+            <button mat-button class="action-button delete" (click)="deleteUserRecipe(rec)">
               <mat-icon>delete</mat-icon> Delete
             </button>
           </ng-container>
-          <!-- For Trending recipes, you might allow a "Save" action -->
-          <ng-container *ngIf="!rec.isEditing && recipeView.value === 'recent'">
-            <button mat-button class="action-button save" (click)="saveRecipe(rec.recipeId)">
+          <!-- For Trending recipes, or edited recipes, allow a "Save" action -->
+          <ng-container *ngIf="!rec.isEditing && (recipeView.value === 'recent' || rec.isEdited) && !rec.editsStored">
+            <button mat-button class="action-button save" (click)="saveRecipe(rec)">
               <mat-icon>bookmark</mat-icon> Save
             </button>
           </ng-container>
